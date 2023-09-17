@@ -1,14 +1,14 @@
 # Debugging Kubernetes Pods
 
-This section explains how to debug Kubernetes pods from the command line by getting information about available pods and checking the logs for specific pods. For more information about the `kubectl` CLI, see [Kubectl Reference Docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands).
+This section explains how to debug Kubernetes pods from the command line by getting information about available pods, checking the logs for specific pods, examining the contents of containers, and debugging a container. For more information about the `kubectl` CLI, see [Kubectl Reference Docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands).
 
 
 <a id="examine-pods"></a>
-## Examine Available Pods
+## View the Status of Available Pods
 
-Before you begin the debugging process, examine all available pods to find pods with possible issue.
+Before you begin the debugging process, list all available pods to find pods with possible issues.
 
-1. To see the status of all pods, use the `kubectl get pods` command. For example:
+1. To view the status of all pods, use the `kubectl get pods` command. For example:
 
    ```bash
    kubectl get pods
@@ -30,7 +30,7 @@ Before you begin the debugging process, examine all available pods to find pods 
      kubectl get pods --no-headers=true | awk '{print $1}'
      ```
      
-   * Filter only the pods in the `Running` state by piping the output to `grep`. For example:
+   * Filter to only the pods in the `Running` state by piping the output to `grep`. For example:
        
      ```bash
      kubectl get pods | grep 'Running'
@@ -42,7 +42,7 @@ Before you begin the debugging process, examine all available pods to find pods 
      kubectl get pods -o json | jq .
      ```
 
-2. For any pod that isn't in the `Running` state or has the `CrashLoopBackOff` or `Pending` state, use the `kubectl describe pod` command to get detailed information, such as environment variables, about a pod. For example:
+2. For any pod that isn't in the `Running` state or has the `CrashLoopBackOff` or `Pending` state, use the `kubectl describe pod` command to get detailed information such as environment variables. For example:
 
    ```bash
    kubectl describe pod my-pod
@@ -51,7 +51,7 @@ Before you begin the debugging process, examine all available pods to find pods 
 <a id="kubectl-logs"></a>   
 ## Examine the Logs for a Pod
 
-When you identify a pod with a potential issue, start debugging by examining its logs.
+When you find a pod with a potential issue, start debugging by examining its logs.
 
 1. To view the logs for an affected pod, use the `kubectl logs` command followed by the pod name. For example:
 
@@ -73,7 +73,7 @@ When you identify a pod with a potential issue, start debugging by examining its
   
    * View the logs for a previously terminated container in the same pod by using the `--previous` flag.
   
-     This can be useful for debugging crash loops.
+     >**Tip:** This can be useful for debugging crash loops.
 
    * Save the log files for offline analysis by redirecting the output to a file. For example:
      
@@ -91,7 +91,7 @@ When you identify a pod with a potential issue, start debugging by examining its
 
 3. Once you identify specific issues or patterns of issues, consider taking steps to prepare your Kubernetes cluster for similar events in the future.
   
-   * Collect logs from multiple pods or clusters by using services such as [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/), [Fluentd](https://www.fluentd.org/), or the ELK stack ([Elasticsearch](https://www.elastic.co/elasticsearch/), [Logstash](https://www.elastic.co/logstash), and [Kibana](https://www.elastic.co/kibana).
+   * Collect logs from multiple pods or clusters by using services such as [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/), [Fluentd](https://www.fluentd.org/), or the ELK stack ([Elasticsearch](https://www.elastic.co/elasticsearch/), [Logstash](https://www.elastic.co/logstash), and [Kibana](https://www.elastic.co/kibana)).
   
    * Correlate logs with metrics or events from other sources to get a comprehensive view of system behaviour by using observability platforms such as [Datadog](https://www.datadoghq.com/) or [Grafana](https://grafana.com/).
   
